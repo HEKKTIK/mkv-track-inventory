@@ -1,0 +1,17 @@
+# Build it yourself from this folder.
+# To run the ready-made image instead, see docker-compose.ghcr.yml
+services:
+  inventory:
+    build: .
+    image: mkv-track-inventory:local
+    volumes:
+      - ${LIBRARY:?set LIBRARY to the folder holding your films}:/library:ro
+      - ./out:/out
+    network_mode: none
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    restart: "no"
+    user: ${OWNER:-1000:1000}

@@ -1,0 +1,24 @@
+# The ready-made image. Nothing to build.
+#
+# Synology: Container Manager -> Project -> Create, paste this file, and set
+# the two values below. Everything else can stay as it is.
+services:
+  inventory:
+    image: ghcr.io/OWNER/mkv-track-inventory:latest   # <- replace OWNER
+    command: ["/library"]
+    volumes:
+      # left of the colon: the folder on your NAS holding the films
+      - /volume1/media:/library:ro
+      # left of the colon: where the CSV should land
+      - /volume1/docker/mkv-track-inventory:/out
+    network_mode: none
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    restart: "no"
+    # The user the container runs as. It has to be allowed to read the library
+    # and write /out. On Synology this is usually your own account: find the
+    # numbers with  id yourname  over SSH, or leave it out and run as root.
+    user: "1026:100"
